@@ -43,7 +43,10 @@ ans-6: JSON
 4. create .eslintignore folder in root dir and add this two for gitignore
     1. node_modules
     2. dist
-5. ```// package.json
+
+5.
+   ```
+   // package.json
 {
   // ...
   "scripts": {
