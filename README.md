@@ -19,20 +19,30 @@
 ```
 2.npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin --save-dev
 3. npx eslint --init
+
 ques-1: How would you like to use ESLint?
+
 ans-1 :To check syntax and find problems
+
 ques-2:What type of modules does your project use?
+
 ans-2 JavaScript modules (import/export)
+
 ques-3: Which framework does your project use?
+
 ans-3:none of these
+
 ques-5: Where does your code run?
+
 ans-5 : node
+
 ques-6:What format do you want your config file to be in?
+
 ans-6: JSON
 
-4. create <.eslintignore> folder in root dir and add this two for gitignore
-    node_modules
-    dist
+4. create .eslintignore folder in root dir and add this two for gitignore
+    1. node_modules
+    2. dist
 5. ```// package.json
 {
   // ...
