@@ -31,8 +31,8 @@ ques-6:What format do you want your config file to be in?
 ans-6: JSON
 
 4. create <.eslintignore> folder in root dir and add this two for gitignore
-  ``` node_modules
-   dist```
+    node_modules
+    dist
 5. ```// package.json
 {
   // ...
