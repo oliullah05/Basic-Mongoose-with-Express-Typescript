@@ -7,3 +7,6 @@
 4. npm install typescript --save-dev
 5. npm i cors dotenv
 6. tsc --init
+## middlewars typescript support setup 
+1. npm i --save-dev @types/express
+2. npm i --save-dev @types/cors
