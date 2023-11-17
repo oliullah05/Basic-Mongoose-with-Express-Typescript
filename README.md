@@ -44,15 +44,11 @@ ans-6: JSON
     1. node_modules
     2. dist
 
-5. add this script into package.json
+5. add this into package.json in scripts
 
-   ```
-
-  // ...
-  "scripts": {
-    "lint": "eslint --ignore-path .eslintignore --ext .js,.ts"
-   },
-  // ...```
+```
+"lint": "eslint --ignore-path .eslintignore --ext .js,.ts"
+```
 
 
 6. to fix auto 
