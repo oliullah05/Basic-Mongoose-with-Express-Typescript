@@ -47,14 +47,12 @@ ans-6: JSON
 5. add this script into package.json
 
    ```
-   // package.json
-{
+
   // ...
   "scripts": {
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts"
    },
-  // ...
-}```
+  // ...```
 
 
 6. to fix auto 
