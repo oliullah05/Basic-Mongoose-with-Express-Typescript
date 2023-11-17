@@ -7,7 +7,9 @@
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src --ignore-path .eslintignore --ext .ts",
-    "lint:fix":"npx eslint src --fix"
+    "lint:fix": "npx eslint src --fix",
+    "format": "prettier --ignore-path .gitignore --write \"./src**/*.+(js|ts|json)\"",
+    "format:fix": "npx prettier --write src"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +26,8 @@
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "^3.1.0",
     "typescript": "^5.2.2"
   }
 }
