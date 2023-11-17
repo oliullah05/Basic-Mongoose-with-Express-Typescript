@@ -44,8 +44,7 @@ ans-6: JSON
     1. node_modules
     2. dist
 
-5.
-   ```
+5.   ```
    // package.json
 {
   // ...
@@ -54,7 +53,9 @@ ans-6: JSON
    },
   // ...
 }```
-6. to fixed auto 
+
+
+6. to fix auto 
 ```
 // pakage.json
  "scripts": {
