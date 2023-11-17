@@ -61,3 +61,17 @@ ans-6: JSON
     "lint:fix":"npx eslint src --fix"
   },
 ```
+
+7. add this into .eslintrc.json
+   ```
+     "rules": {
+        "no-unused-vars": "error",
+        "no-unused-expressions":"error",
+        "prefer-const":"error",
+        "no-console":"warn",
+        "no-undef":"error"
+    },
+    "globals": {
+        "process":"readonly"
+    }
+   ```
