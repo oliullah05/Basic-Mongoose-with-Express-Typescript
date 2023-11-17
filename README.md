@@ -44,7 +44,9 @@ ans-6: JSON
     1. node_modules
     2. dist
 
-5.   ```
+5. add this script into package.json
+
+   ```
    // package.json
 {
   // ...
