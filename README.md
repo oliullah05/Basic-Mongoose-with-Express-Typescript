@@ -63,6 +63,7 @@ ans-6: JSON
 ```
 
 7. add this into .eslintrc.json
+   
    ```
      "rules": {
         "no-unused-vars": "error",
@@ -75,3 +76,40 @@ ans-6: JSON
         "process":"readonly"
     }
    ```
+
+   ## Prettier setup
+
+1. npm install --save-dev prettier
+2. create .prettierrc.json file in root and add this
+   ```
+ {
+  "semi": true,
+  "singleQuote": true
+}}
+```
+3. add package.json in scripts
+```
+"format": "prettier --ignore-path .gitignore --write \"./src**/*.+(js|ts|json)\""
+```
+4. add two property in VSC-code setting.json
+```
+//vs code  settings.json
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  ...
+}
+```
+5. Avoiding conflicts when working with ESLint and Prettier
+```
+npm install --save-dev eslint-config-prettier
+```
+6. go to .eslintrc file and replace extends with this
+```
+"extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+```
+7. add this into package.json in starts
+```
+"format:fix": "npx prettier --write src"
+```
+
