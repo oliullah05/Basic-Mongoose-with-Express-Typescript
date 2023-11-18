@@ -2,6 +2,7 @@ import { Schema, model, connect } from 'mongoose';
 import { Students } from './stunent.interface';
 
 
+
 const studentSchema = new Schema<Students>({
     id:{type:String},
     name:{
