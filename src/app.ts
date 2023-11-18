@@ -6,6 +6,15 @@ const app: Application = express();
 app.use(express.json());
 app.use(cors());
 
+
+app.get("/data",(req: Request, res: Response)=>{
+res.send({
+  "server is running":2
+})
+})
+
+
+
 app.get('/', (req: Request, res: Response) => {
 
   res.send("server is running");
