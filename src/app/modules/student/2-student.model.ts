@@ -1,6 +1,7 @@
-import { Schema, model, connect } from 'mongoose';
-import { Gurdian, LocalGurdian, Students, UserName } from './stunent.interface';
+import { Schema, model } from 'mongoose';
+import { Gurdian, LocalGurdian, Students, UserName } from './1-stunent.interface';
 
+                            // 2. Create a Schema corresponding to the document interface.
 
 
 
@@ -53,3 +54,25 @@ const studentSchema = new Schema<Students>({
     profileImage:String,
     isActive:["active","inactive"]
 })
+
+
+
+
+
+
+                         // 3. Create a Model.
+export const StudentModel = model<Students>("Student",studentSchema)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
