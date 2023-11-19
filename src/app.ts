@@ -7,19 +7,8 @@ const app: Application = express();
 app.use(express.json());
 app.use(cors());
 
-
-
 //application route
-app.use('/api/v1/students',studentRoutes) //api/v1/students/create-student
-
-
-
-
-
-
-
-
-
+app.use('/api/v1/students', studentRoutes); //api/v1/students/create-student
 
 // const getAController = (req: Request, res: Response)=>{
 //   const a=10;
@@ -28,7 +17,7 @@ app.use('/api/v1/students',studentRoutes) //api/v1/students/create-student
 // app.get("/",getAController)
 
 app.get('/', (req: Request, res: Response) => {
-  res.send("server is running");
+  res.send('server is running');
 });
 
 export default app;
