@@ -1,13 +1,31 @@
 import { Request, Response } from "express";
 import { studentService } from "./5-student.service";
+import studentValidationJoiSchema from "./student.validation.joi";
+
+
 
 
 const createStudent = async(req:Request,res:Response)=>{
 
     try{
 
+
+
+
+
+
+
         const studentData = req.body.student;
-        // console.log(studentData);
+
+
+     const {error}=   studentValidationJoiSchema.validate(studentData)
+     if(error){
+      res.status(500).json({
+        success:false,
+         message:"student can't created successfully for joi",
+         error:error
+    })
+
         //will call service function to send this data
         const result = await studentService.createStudentIntoDB(studentData)
         //send response here
@@ -16,6 +34,9 @@ const createStudent = async(req:Request,res:Response)=>{
              message:"student created successfully",
              data:result
         })
+
+      
+        }
 
     }
     catch(err){

@@ -7,7 +7,7 @@ import validator from 'validator';
 
 
 
-const userNameSchema = new Schema<UserName>({
+export const userNameSchema = new Schema<UserName>({
     firstName:{
         type:String,
         trim:true,
@@ -36,7 +36,7 @@ const userNameSchema = new Schema<UserName>({
       }
 })
 
-const gurdianSchema=new Schema<Gurdian> ({
+export const gurdianSchema=new Schema<Gurdian> ({
     fatherName:{type:String,required:true},
     fatherOccupation:{type:String,required:true},
     fatherContactNO:{type:String,required:true},
@@ -45,7 +45,7 @@ const gurdianSchema=new Schema<Gurdian> ({
     motherContactNO:{type:String,required:true}
 })
 
-const localGurdianSchema = new Schema<LocalGurdian>({
+export const localGurdianSchema = new Schema<LocalGurdian>({
     name:{type:String,required:true},
    occupation :{type:String,required:true},
     contactNo:{type:String,required:true},
@@ -54,7 +54,7 @@ const localGurdianSchema = new Schema<LocalGurdian>({
 
 
 
-const studentSchema = new Schema<Students>({
+export const studentSchema = new Schema<Students>({
     id:{type:String,required:true,unique:true},
     name:{
         type:userNameSchema,
@@ -116,6 +116,7 @@ const studentSchema = new Schema<Students>({
 
                          // 3. Create a Model.
 export const StudentModel = model<Students>("Student",studentSchema)
+
 
 
 
