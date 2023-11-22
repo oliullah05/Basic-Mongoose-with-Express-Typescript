@@ -9,14 +9,18 @@ import { Gurdian, LocalGurdian, Students, UserName } from './1-stunent.interface
 const userNameSchema = new Schema<UserName>({
     firstName:{
         type:String,
-        required:true
+        trim:true,
+        required:[true,"first name is required"],
+        maxlength:[50,"first name cant be more then 20 characters"]
     },
     middleName:{
         type:String,
+        trim:true
     },
     lastName:{
         type:String,
-        required:true
+        trim:true,
+        required:[true,"last name is required"]
     }
 })
 
@@ -39,21 +43,46 @@ const localGurdianSchema = new Schema<LocalGurdian>({
 
 
 const studentSchema = new Schema<Students>({
-    id:{type:String},
-    name:userNameSchema,
-    gender:["male","female"], //enum
+    id:{type:String,required:true,unique:true},
+    name:{
+        type:userNameSchema,
+        required:[true,"name is required"]
+    },
+    gender:{
+        type:String,
+        enum:{
+            values:["male","female","other"],
+            message:"{VALUE} is not correct . Gender must be in male or female or other"  //error mesage
+        },
+        required:true
+    }, 
     dateOfBirth:String,
-    email:{type:String,required:true},
+    email:{type:String,required:true,unique:true},
     contactNo:{type:String,required:true},
     emergencyContactNo:{type:String,required:true},
-    blodGroup:['A+' , 'A-' , 'B+' , 'B-' , 'AB+' , 'AB-' , 'O+' , 'O-'], //enum
+    blodGroup:{
+        type:String,
+        enum:['A+' , 'A-' , 'B+' , 'B-' , 'AB+' , 'AB-' , 'O+' , 'O-']
+    }, 
     presentAddress:{type:String,required:true},
     parmanentAddress:{type:String,required:true},
-    gurdian:gurdianSchema,
-    localGurdian:localGurdianSchema,
+    gurdian:{
+        type:gurdianSchema,
+        required:true
+    },
+    localGurdian:{
+        type:localGurdianSchema,
+        required:true
+    },
     profileImage:String,
-    isActive:["active","inactive"]
+    isActive:{
+        type:String,
+        enum:["active","inactive"],
+        default:"active"
+    }
+
 })
+
 
 
 

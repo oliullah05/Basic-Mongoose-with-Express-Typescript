@@ -19,7 +19,11 @@ const createStudent = async(req:Request,res:Response)=>{
 
     }
     catch(err){
-        console.log(err);
+        res.status(500).json({
+            success:false,
+             message:"student can't created successfully",
+             error:err
+        })
     }
 
 }
