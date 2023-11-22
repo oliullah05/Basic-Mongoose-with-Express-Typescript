@@ -1,6 +1,8 @@
 import { Schema, model } from 'mongoose';
 import { TGurdian, TLocalGurdian, TStudents, TUserName, StudentModel } from './1-stunent.interface';
 import validator from 'validator';
+import bcrypt from "bcrypt"
+import config from '../../config';
 
                             // 2. Create a Schema corresponding to the document interface.
 
@@ -56,6 +58,7 @@ export const localGurdianSchema = new Schema<TLocalGurdian>({
 
 export const studentSchema = new Schema<TStudents,StudentModel>({
     id:{type:String,required:true,unique:true},
+    password:{type:String,required:[true,"passsword is required"],maxlength:[30,"password can not be more then 20 characters"]},
     name:{
         type:userNameSchema,
         required:[true,"name is required"]
@@ -110,11 +113,21 @@ export const studentSchema = new Schema<TStudents,StudentModel>({
 
 
 
+// pre save middlewar :will work on create() or save()
 
+studentSchema.pre("save",async function(next){
+   // hasing password and save into db
+   // eslint-disable-next-line @typescript-eslint/no-this-alias
+   const user = this;
+  user.password =await bcrypt.hash(user.password,Number(config.bcrypt_solt_rounds))
+  next()
+})
 
+// post save middlewar
 
-
-
+studentSchema.post("save",function(){
+    console.log(this,"post hook: we jast saved data");
+})
 
 
 

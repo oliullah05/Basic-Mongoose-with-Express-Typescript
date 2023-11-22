@@ -98,6 +98,7 @@ const userNameJoiSchema = Joi.object({
   
   export const StudentZodSchema = z.object({
     id: z.string(),
+    password:z.string().max(20),
     name: UserNameZodSchema,
     gender: z.enum(['male', 'female', 'other']),
     dateOfBirth: z.string(),

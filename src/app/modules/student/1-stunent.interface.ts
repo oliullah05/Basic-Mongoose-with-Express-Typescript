@@ -28,6 +28,7 @@ export type TLocalGurdian ={
 
 export type TStudents ={
     id:string;
+    password:string;
     name:TUserName;
     gender:"male"|"female"|"other";
     dateOfBirth?:string;
