@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { studentService } from "./5-student.service";
-import studentValidationJoiSchema, { StudentZodSchema } from "./student.validation.joi-zod";
+import  { StudentZodSchema } from "./student.validation.joi-zod";
 
 
 
@@ -47,10 +47,10 @@ const createStudent = async(req:Request,res:Response)=>{
       
         }
 
-       catch(err){
+       catch(err:any){
         res.status(500).json({
             success:false,
-             message:"student can't created successfully",
+             message:err.message || "student can't created successfully",
              error:err
         })
     }

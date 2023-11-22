@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { Gurdian, LocalGurdian, Students, UserName } from './1-stunent.interface';
+import { TGurdian, TLocalGurdian, TStudents, TUserName, StudentModel } from './1-stunent.interface';
 import validator from 'validator';
 
                             // 2. Create a Schema corresponding to the document interface.
@@ -7,7 +7,7 @@ import validator from 'validator';
 
 
 
-export const userNameSchema = new Schema<UserName>({
+export const userNameSchema = new Schema<TUserName>({
     firstName:{
         type:String,
         trim:true,
@@ -36,7 +36,7 @@ export const userNameSchema = new Schema<UserName>({
       }
 })
 
-export const gurdianSchema=new Schema<Gurdian> ({
+export const gurdianSchema=new Schema<TGurdian> ({
     fatherName:{type:String,required:true},
     fatherOccupation:{type:String,required:true},
     fatherContactNO:{type:String,required:true},
@@ -45,7 +45,7 @@ export const gurdianSchema=new Schema<Gurdian> ({
     motherContactNO:{type:String,required:true}
 })
 
-export const localGurdianSchema = new Schema<LocalGurdian>({
+export const localGurdianSchema = new Schema<TLocalGurdian>({
     name:{type:String,required:true},
    occupation :{type:String,required:true},
     contactNo:{type:String,required:true},
@@ -54,7 +54,7 @@ export const localGurdianSchema = new Schema<LocalGurdian>({
 
 
 
-export const studentSchema = new Schema<Students>({
+export const studentSchema = new Schema<TStudents,StudentModel>({
     id:{type:String,required:true,unique:true},
     name:{
         type:userNameSchema,
@@ -114,8 +114,44 @@ export const studentSchema = new Schema<Students>({
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//creating custom instanse method
+
+// studentSchema.methods.isUserExits= async function(id:string){
+//     const exitingUser = await Student.findOne({id})
+//     return exitingUser
+// }
+
+
+//creating custom static method
+
+studentSchema.statics.isUserExists = async function (id: string) {
+    const existingUser = await Student.findOne({ id });
+    return existingUser;
+  };
+
                          // 3. Create a Model.
-export const StudentModel = model<Students>("Student",studentSchema)
+export const Student = model<TStudents,StudentModel>("Student",studentSchema)
 
 
 
