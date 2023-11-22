@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { studentService } from "./5-student.service";
-import studentValidationJoiSchema from "./student.validation.joi";
+import studentValidationJoiSchema, { StudentZodSchema } from "./student.validation.joi-zod";
 
 
 
@@ -8,26 +8,35 @@ import studentValidationJoiSchema from "./student.validation.joi";
 const createStudent = async(req:Request,res:Response)=>{
 
     try{
-
-
-
-
-
-
-
         const studentData = req.body.student;
 
 
-     const {error}=   studentValidationJoiSchema.validate(studentData)
-     if(error){
-      res.status(500).json({
-        success:false,
-         message:"student can't created successfully for joi",
-         error:error
-    })
+                                 //data validation using joi
+    //  const {error,value}=   studentValidationJoiSchema.validate(studentData)
+                   //  joi error
 
-        //will call service function to send this data
-        const result = await studentService.createStudentIntoDB(studentData)
+    //  if(error){
+    //   res.status(500).json({
+    //     success:false,
+    //      message:"student can't created successfully for joi",
+    //      error:error.details
+    // })
+
+
+ 
+                                  //data valodation using zod
+ 
+               const zodParsedData = StudentZodSchema.parse(studentData)
+   
+
+
+
+       //will call service function to send this data
+       const result = await studentService.createStudentIntoDB(zodParsedData)
+
+
+   
+      
         //send response here
         res.status(200).json({
             success:true,
@@ -38,8 +47,7 @@ const createStudent = async(req:Request,res:Response)=>{
       
         }
 
-    }
-    catch(err){
+       catch(err){
         res.status(500).json({
             success:false,
              message:"student can't created successfully",

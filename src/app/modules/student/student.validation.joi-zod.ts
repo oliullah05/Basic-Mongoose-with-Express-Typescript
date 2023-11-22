@@ -1,5 +1,6 @@
 // creating a schema validation using joi
 import Joi from "joi"
+import { z } from "zod";
 
 
 const userNameJoiSchema = Joi.object({
@@ -45,7 +46,7 @@ const userNameJoiSchema = Joi.object({
   });
   
   // Define Joi schema for student
-  const studentValidationJoiSchema = Joi.object({
+  export const studentValidationJoiSchema = Joi.object({
     id: Joi.string().required(),
     name: userNameJoiSchema.required(),
     gender: Joi.string().valid('male', 'female', 'other').required(),
@@ -62,4 +63,53 @@ const userNameJoiSchema = Joi.object({
     isActive: Joi.string().valid('active', 'inactive').default('active'),
   });
 
-  export default studentValidationJoiSchema;
+
+
+
+
+
+
+
+
+
+
+
+  const UserNameZodSchema = z.object({
+    firstName: z.string().min(1).max(50),
+    middleName: z.string().optional(),
+    lastName: z.string().min(1),
+  });
+  
+  const GurdianZodSchema = z.object({
+    fatherName: z.string(),
+    fatherOccupation: z.string(),
+    fatherContactNO: z.string(),
+    motherName: z.string(),
+    motherOccupation: z.string(),
+    motherContactNO: z.string(),
+  });
+  
+  const LocalGurdianZodSchema = z.object({
+    name: z.string(),
+    occupation: z.string(),
+    contactNo: z.string(),
+    address: z.string(),
+  });
+  
+  export const StudentZodSchema = z.object({
+    id: z.string(),
+    name: UserNameZodSchema,
+    gender: z.enum(['male', 'female', 'other']),
+    dateOfBirth: z.string(),
+    email: z.string().email(),
+    contactNo: z.string(),
+    emergencyContactNo: z.string(),
+    blodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']).optional(),
+    presentAddress: z.string(),
+    parmanentAddress: z.string(),
+    gurdian: GurdianZodSchema,
+    localGurdian: LocalGurdianZodSchema,
+    profileImage: z.string().optional(),
+    isActive: z.enum(['active', 'inactive']).default('active'),
+  });
+
