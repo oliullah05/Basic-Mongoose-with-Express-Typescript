@@ -9,6 +9,7 @@ const router =express.Router()
 router.post('/create-student',studentControllers.createStudent)
 router.get('/',studentControllers.getAllStudents)
 router.get('/:studentId',studentControllers.getSingleStudent)
+router.put('/:studentId',studentControllers.deleteSingleStudent)
 
 export const studentRoutes =router;
 

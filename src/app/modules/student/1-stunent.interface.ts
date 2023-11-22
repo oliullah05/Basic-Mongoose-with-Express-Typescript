@@ -41,7 +41,8 @@ export type TStudents ={
     gurdian:TGurdian;
     localGurdian:TLocalGurdian;
     profileImage?:string;
-    isActive:"active"|"inactive"
+    isActive:"active"|"inactive",
+    isDeleted:true|false
   }
                                    //for custom creating instanse
 

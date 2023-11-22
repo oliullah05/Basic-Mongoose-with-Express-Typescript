@@ -107,10 +107,13 @@ export const studentSchema = new Schema<TStudents,StudentModel>({
         type:String,
         enum:["active","inactive"],
         default:"active"
+    },
+    isDeleted:{
+        type:Boolean,
+        default:false
     }
 
 })
-
 
 
 // pre save middlewar :will work on create() or save()
@@ -125,14 +128,27 @@ studentSchema.pre("save",async function(next){
 
 // post save middlewar
 
-studentSchema.post("save",function(){
-    console.log(this,"post hook: we jast saved data");
+studentSchema.post("save",function(doc,next){
+   doc.password=""
+   next()
 })
 
 
 
 
-
+//query middlewar
+studentSchema.pre("find",function(next){
+    this.find({isDeleted:false})
+    next()
+})
+studentSchema.pre("findOne",function(next){
+    this.find({isDeleted:false})
+    next()
+})
+studentSchema.pre("aggregate",function(next){
+    this.pipeline().unshift({$match:{isDeleted:{$ne:true}}})
+    next()
+})
 
 
 

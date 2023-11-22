@@ -112,5 +112,6 @@ const userNameJoiSchema = Joi.object({
     localGurdian: LocalGurdianZodSchema,
     profileImage: z.string().optional(),
     isActive: z.enum(['active', 'inactive']).default('active'),
+    isDeleted:z.boolean()
   });
 
