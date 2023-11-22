@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { Gurdian, LocalGurdian, Students, UserName } from './1-stunent.interface';
+import validator from 'validator';
 
                             // 2. Create a Schema corresponding to the document interface.
 
@@ -24,11 +25,15 @@ const userNameSchema = new Schema<UserName>({
         type:String,
         trim:true
     },
-    lastName:{
-        type:String,
-        trim:true,
-        required:[true,"last name is required"]
-    }
+    lastName: {
+        type: String,
+        trim: true,
+        required: [true, "Last name is required"],
+        validate: {
+          validator: (value:string) => validator.isAlpha(value),
+          message: "{VALUE} is not valid alpha"
+        }
+      }
 })
 
 const gurdianSchema=new Schema<Gurdian> ({
@@ -64,7 +69,20 @@ const studentSchema = new Schema<Students>({
         required:true
     }, 
     dateOfBirth:String,
-    email:{type:String,required:true,unique:true},
+    email:{
+        type:String,
+        required:true,
+        unique:true,
+        validate:{
+          validator:  (value:string)=>validator.isEmail(value),
+          message:"{VALUE} is not correct email"
+        }
+    
+    
+    
+    
+    
+    },
     contactNo:{type:String,required:true},
     emergencyContactNo:{type:String,required:true},
     blodGroup:{
