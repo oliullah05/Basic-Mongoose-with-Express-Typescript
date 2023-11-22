@@ -11,7 +11,14 @@ const userNameSchema = new Schema<UserName>({
         type:String,
         trim:true,
         required:[true,"first name is required"],
-        maxlength:[50,"first name cant be more then 20 characters"]
+        maxlength:[50,"first name cant be more then 20 characters"],
+        validate:{
+            validator:function(value:string){
+                const firstLatterCapitalize =value.charAt(0).toUpperCase() + value.slice(1);
+               return value === firstLatterCapitalize
+                },
+                message:"{VALUE} ,first charecters must be capital latter"    
+        }
     },
     middleName:{
         type:String,
