@@ -1,24 +1,42 @@
-import express, { Application, Request, Response } from 'express';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import cors from 'cors';
-import { studentRoutes } from './app/modules/student/3-stunent.routes';
+import express, { Application, Request, Response, NextFunction } from 'express';
+import { StudentRoutes } from './app/modules/student/student.route';
+import { UserRoutes } from './app/modules/user/user.route';
+import { globalErrorHandler } from './app/middlewars/globalErrorHandler';
+import { notFound } from './app/middlewars/notFound';
+import router from './app/routes';
+
+
 const app: Application = express();
 
 //parsers
 app.use(express.json());
 app.use(cors());
 
-//application route
-app.use('/api/v1/students', studentRoutes); //api/v1/students/create-student
+// application routes
 
-// const getAController = (req: Request, res: Response)=>{
-//   const a=10;
-//   res.send(a)
-//   }
-// app.get("/",getAController)
+app.use('/api/v1/', router);
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('server is running');
-});
+
+const getAController = (req: Request, res: Response) => {
+
+  res.send("server is running");
+};
+
+app.get('/', getAController);
+
+
+
+
+
+
+
+//global error handling
+
+app.use(globalErrorHandler);
+app.use(notFound);
 
 export default app;
-// console.log(process.cwd());
