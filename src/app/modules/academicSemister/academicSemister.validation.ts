@@ -1,29 +1,21 @@
 import { z } from 'zod';
+import { academicSemisterCode, academicSemisterMonth, academicSemisterName } from './academicSemister.constant';
 
-const Month = z.enum([
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-]);
 
-export const createAcademicSemistervalidationSchema = z.object({
+
+
+const createAcademicSemistervalidationSchema = z.object({
     body: z.object({
-        name: z.enum(['autumn', 'summer', 'fall']),
-        code: z.enum(['01', '02', '03']),
+        name: z.enum([...academicSemisterName] as [string, ...string[]]),
+        code: z.enum([...academicSemisterCode] as [string, ...string[]]),
         year: z.date(),
-        startMonth: Month,
-        endMonth: Month,
+        startMonth: z.enum([...academicSemisterMonth] as [string, ...string[]]),
+        endMonth: z.enum([...academicSemisterMonth] as [string, ...string[]]),
     })
 });
 
+
+
+export const AcademicSemistervalidations = { createAcademicSemistervalidationSchema }
 
 

@@ -15,11 +15,11 @@ export type TAcademicSemisterMonths =
 
 export type TAcademicSemisterName = 'autumn' | 'summer' | 'fall'
 
-
+export type TAcademicSemisterCode = "01" | "02" | "03"
 
 export type TAcademicSemister = {
     name: TAcademicSemisterName,
-    code: "01" | "02" | "03",
+    code: TAcademicSemisterCode,
     year: Date,
     startMonth: TAcademicSemisterMonths,
     endMonth: TAcademicSemisterMonths
