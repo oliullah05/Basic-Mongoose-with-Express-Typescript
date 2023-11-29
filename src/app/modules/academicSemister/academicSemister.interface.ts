@@ -20,7 +20,7 @@ export type TAcademicSemisterCode = "01" | "02" | "03"
 export type TAcademicSemister = {
     name: TAcademicSemisterName,
     code: TAcademicSemisterCode,
-    year: Date,
+    year: string,
     startMonth: TAcademicSemisterMonths,
     endMonth: TAcademicSemisterMonths
 }
