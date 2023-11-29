@@ -17,7 +17,18 @@ const academicSemesterSchema = new Schema<TAcademicSemister>({
     timestamps: true
 });
 
-academicSemesterSchema.index({ name: 1, year: 1 }, { unique: true })
+// academicSemesterSchema.index({ name: 1, year: 1 }, { unique: true })
+
+academicSemesterSchema.pre("save", async function (next) {
+    const isSemisterExits = await AcademicSemester.findOne({
+        name: this.name,
+        year: this.year
+    })
+    if (isSemisterExits) {
+        throw new Error("Semister is alrady exits")
+    }
+
+})
 
 
 export const AcademicSemester = model<TAcademicSemister>("AcademicSemister", academicSemesterSchema)
