@@ -1,6 +1,6 @@
 
-export type TMonth =
-    'January'
+export type TAcademicSemisterMonths =
+    | 'January'
     | 'February'
     | 'March'
     | 'April'
@@ -13,11 +13,14 @@ export type TMonth =
     | 'November'
     | 'December';
 
+export type TAcademicSemisterName = 'autumn' | 'summer' | 'fall'
+
+
 
 export type TAcademicSemister = {
-    name: "autumn" | "summar" | "fall",
+    name: TAcademicSemisterName,
     code: "01" | "02" | "03",
     year: Date,
-    startMonth: TMonth,
-    endMonth: TMonth
+    startMonth: TAcademicSemisterMonths,
+    endMonth: TAcademicSemisterMonths
 }
