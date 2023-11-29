@@ -27,7 +27,7 @@ academicSemesterSchema.pre("save", async function (next) {
     if (isSemisterExits) {
         throw new Error("Semister is alrady exits")
     }
-
+    next()
 })
 
 

@@ -8,4 +8,16 @@ const router = express.Router();
 
 router.post("/create-academic-semister", validateZodRequest(AcademicSemistervalidations.createAcademicSemistervalidationSchema), AcademicSemisterControllers.createAcademicSemister)
 
+
+router.get("/academic-semister", AcademicSemisterControllers.getAllSemister)
+
+
+router.get("/academic-semister/:semisterId", AcademicSemisterControllers.getSingleSemister)
+router.patch("/academic-semister/:semisterId", AcademicSemisterControllers.updateSingleSemister)
+
+
+
+
+
+
 export const AcademicSemisterRoutes = router;
