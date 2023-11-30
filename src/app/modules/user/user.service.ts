@@ -23,13 +23,8 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
   //set student rule
   userData.role = "student";
 
-  if (!admissionSemister) {
-    throw new Error("admission not found")
-  }
-
-
   //set manually genarated id
-  userData.id = genarateStudentId(admissionSemister)
+  userData.id =await genarateStudentId(admissionSemister)
 
   //create a user
   const newUser = await User.create(userData);
