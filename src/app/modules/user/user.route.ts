@@ -11,9 +11,9 @@ const router = express.Router();
 
 
 
+// validateZodRequest(studentValidations.createStudentValidationSchema),
 
-
-router.post('/create-student', validateZodRequest(studentValidations.createStudentValidationSchema), UserControllers.createStudent);
+router.post('/create-student', UserControllers.createStudent);
 
 
 export const UserRoutes = router;
