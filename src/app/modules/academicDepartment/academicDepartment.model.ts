@@ -20,5 +20,41 @@ const academicDeparmentSchema = new Schema<TAcademicDepartment>(
  }
 );
 
+academicDeparmentSchema.pre("save",async function(next){
+const isDepartmentExits = await AcademicDepartment.findOne({
+    name:this.name
+  })
+  
+  if(isDepartmentExits){
+   throw new Error("this department is alrady exits")
+  }
+  next()
+})
+
+academicDeparmentSchema.pre("findOneAndUpdate",async function(next){
+const query = this.getQuery();
+const isDepartmentExits = await AcademicDepartment.findOne(query)
+  
+  if(!isDepartmentExits){
+   throw new Error("this department doesn't exits")
+  }
+  next()
+})
+
+
+
+
+
+
+
+
 
 export const  AcademicDepartment = model<TAcademicDepartment>('AcademicDepartment', academicDeparmentSchema);
+
+
+
+
+
+  
+  
+  
