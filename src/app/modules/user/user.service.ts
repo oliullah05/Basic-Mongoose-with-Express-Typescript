@@ -1,59 +1,43 @@
-import config from "../../config";
-import { TAcademicSemister } from "../academicSemister/academicSemister.interface";
-import { AcademicSemester } from "../academicSemister/academicSemister.model";
-import { TStudent } from "../student/student.interface";
-import { Student } from "../student/student.model";
-import { TUser } from "./user.interface";
-
-import { User } from "./user.model";
-import { genarateStudentId } from "./user.utils";
-
+import config from '../../config';
+import { TStudent } from '../student/student.interface';
+import { Student } from '../student/student.model';
+import { AcademicSemester } from './../academicSemester/academicSemester.model';
+import { TUser } from './user.interface';
+import { User } from './user.model';
+import { generateStudentId } from './user.utils';
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
-
   // create a user object
-  const userData: Partial<TUser> = {}
+  const userData: Partial<TUser> = {};
 
+  //if password is not given , use deafult password
+  userData.password = password || (config.default_password as string);
 
-  //if password is not given ,we use default password
-  userData.password = password || config.default_password as string
+  //set student role
+  userData.role = 'student';
 
-  const admissionSemister = await AcademicSemester.findById(payload.admissionSemister)
+  // find academic semester info
+  const admissionSemester = await AcademicSemester.findById(
+    payload.admissionSemester,
+  );
 
-  //set student rule
-  userData.role = "student";
+  //set  generated id
+  userData.id = await generateStudentId(admissionSemester);
 
-  //set manually genarated id
-  userData.id =await genarateStudentId(admissionSemister)
-
-  //create a user
+  // create a user
   const newUser = await User.create(userData);
 
-
-
-
-  if (Object.keys(payload).length) {
-    //set id ,_id as user
+  //create a student
+  if (Object.keys(newUser).length) {
+    // set id , _id as user
     payload.id = newUser.id;
-    payload.user = newUser._id;   //referance id
+    payload.user = newUser._id; //reference _id
 
-    const newStudent = await Student.create(payload)
-
-
-    return newStudent
+    const newStudent = await Student.create(payload);
+    return newStudent;
   }
-
-
-
-
-
-
-
-
-
-
 };
 
-export const UserService = {
-  createStudentIntoDB
-}
+export const UserServices = {
+  createStudentIntoDB,
+};

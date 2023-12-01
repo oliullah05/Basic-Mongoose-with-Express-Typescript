@@ -1,47 +1,42 @@
-import { Schema, model } from 'mongoose';
-import { TUser } from './user.interface';
 import bcrypt from 'bcrypt';
+import { Schema, model } from 'mongoose';
 import config from '../../config';
-
-const userSchema = new Schema<TUser>({
+import { TUser } from './user.interface';
+const userSchema = new Schema<TUser>(
+  {
     id: {
-        type: String,
-        required: [true, 'User ID is required'],
-        trim:true,
-        unique:true
+      type: String,
+      required: true,
+      unique: true,
     },
     password: {
-        type: String,
-        required: [true, 'Password is required'],
+      type: String,
+      required: true,
     },
-    needPasswordChange: {
-        type: Boolean,
-        default: true,
+    needsPasswordChange: {
+      type: Boolean,
+      default: true,
     },
     role: {
-        type: String,
-        enum: ['admin', 'student', 'faculty'],
-        required: [true, 'User role is required'],
-    },
-    isDeleted: {
-        type: Boolean,
-        default: false,
+      type: String,
+      enum: ['student', 'faculty', 'admin'],
     },
     status: {
-        type: String,
-        enum: ['in-progress', 'blocked'],
-        required: [true, 'User status is required'],
-        default:'in-progress'
+      type: String,
+      enum: ['in-progress', 'blocked'],
+      default: 'in-progress',
     },
-},{
-    timestamps:true
-})
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
 
-
-
-// pre save middleware/ hook : will work on create()  save()
 userSchema.pre('save', async function (next) {
-  // console.log(this, 'pre hook : we will save  data');
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this; // doc
   // hashing password and save into DB
@@ -52,13 +47,10 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// post save middleware / hook
+// set '' after saving password
 userSchema.post('save', function (doc, next) {
   doc.password = '';
   next();
 });
 
-
-
-
-export const User = model<TUser>("User",userSchema)
+export const User = model<TUser>('User', userSchema);

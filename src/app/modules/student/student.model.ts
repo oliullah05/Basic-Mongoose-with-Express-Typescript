@@ -1,4 +1,3 @@
-
 import { Schema, model } from 'mongoose';
 import {
   StudentModel,
@@ -7,7 +6,6 @@ import {
   TStudent,
   TUserName,
 } from './student.interface';
-
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -78,12 +76,16 @@ const localGuradianSchema = new Schema<TLocalGuardian>({
 
 const studentSchema = new Schema<TStudent, StudentModel>(
   {
-    id: { type: String, required: [true, 'ID is required'], unique: true },
+    id: {
+      type: String,
+      required: [true, 'ID is required'],
+      unique: true,
+    },
     user: {
       type: Schema.Types.ObjectId,
-      required: [true, 'UserName is required'],
+      required: [true, 'User id is required'],
       unique: true,
-      ref: "User"
+      ref: 'User',
     },
     name: {
       type: userNameSchema,
@@ -132,12 +134,10 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, 'Local guardian information is required'],
     },
     profileImg: { type: String },
-    admissionSemister: {
+    admissionSemester: {
       type: Schema.Types.ObjectId,
-      ref: "AcademicSemister",
-      required: true
+      ref: 'AcademicSemester',
     },
-
     isDeleted: {
       type: Boolean,
       default: false,
@@ -155,7 +155,6 @@ studentSchema.virtual('fullName').get(function () {
   return this.name.firstName + this.name.middleName + this.name.lastName;
 });
 
-
 // Query Middleware
 studentSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });
@@ -167,8 +166,6 @@ studentSchema.pre('findOne', function (next) {
   next();
 });
 
-// [ {$match: { isDeleted : {  $ne: : true}}}   ,{ '$match': { id: '123456' } } ]
-
 studentSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
   next();
@@ -179,12 +176,5 @@ studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id });
   return existingUser;
 };
-
-//creating a custom instance method
-// studentSchema.methods.isUserExists = async function (id: string) {
-//   const existingUser = await Student.findOne({ id });
-
-//   return existingUser;
-// };
 
 export const Student = model<TStudent, StudentModel>('Student', studentSchema);
