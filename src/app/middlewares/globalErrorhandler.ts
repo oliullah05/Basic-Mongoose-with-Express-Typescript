@@ -8,6 +8,7 @@ import { TErrorSources } from '../interface/error';
 import config from '../config';
 import { handleZodError } from '../errors/handleZodError';
 import { handleValidationError } from '../errors/handleValidationError';
+import { handleCastError } from '../errors/handleCastError';
 
 const globalErrorHandler: ErrorRequestHandler = (
   err,
@@ -51,7 +52,12 @@ else if(err?.name==="ValidationError"){
 
 
 
-
+else if (err?.name ==="CastError"){
+  const simplifiedError = handleCastError(err)
+  statusCode=simplifiedError.statusCode;
+  message = simplifiedError.message ;
+  errorSources= simplifiedError.errorSources
+}
 
 
 
@@ -64,6 +70,7 @@ else if(err?.name==="ValidationError"){
     success: false,
     message,
     errorSources,
+    err,
     stack:config.node_env==="development" ?   err?.stack : null
   });
 };
