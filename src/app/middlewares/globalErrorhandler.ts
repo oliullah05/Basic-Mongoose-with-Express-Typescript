@@ -6,6 +6,8 @@ import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import { ZodError, ZodIssue } from 'zod';
 import { TErrorSources } from '../interface/error';
 import config from '../config';
+import { handleZodError } from '../errors/handleZodError';
+import { handleValidationError } from '../errors/handleValidationError';
 
 const globalErrorHandler: ErrorRequestHandler = (
   err,
@@ -26,28 +28,7 @@ const globalErrorHandler: ErrorRequestHandler = (
     message: "Something went wrong!"
   }]
 
-
-
-
-  const handleZodError = (err: ZodError) => {
-    const statusCode = 400;
-    const errorSources: TErrorSources = err.issues.map((issue: ZodIssue) => {
-      return {
-        path: issue?.path[issue.path.length - 1],
-        message: issue?.message
-      }
-    })
-
-
-
-    return {
-      statusCode,
-      message: "Validation Error",
-      errorSources
-
-    }
-  }
-
+//zod error capture 
 
   if (err instanceof ZodError) {
     const simplifiedError = handleZodError(err)
@@ -55,6 +36,18 @@ const globalErrorHandler: ErrorRequestHandler = (
     message = simplifiedError.message ;
     errorSources= simplifiedError.errorSources
   }
+
+
+
+//mongoose error capture 
+
+
+else if(err?.name==="ValidationError"){
+  const simplifiedError = handleValidationError(err)
+  statusCode=simplifiedError.statusCode;
+  message = simplifiedError.message ;
+  errorSources= simplifiedError.errorSources
+}
 
 
 
