@@ -5,28 +5,46 @@ import { User } from '../user/user.model';
 import { TStudent } from './student.interface';
 import { Student } from './student.model';
 
-const getAllStudentsFromDB = async (query:Record<string,unknown>) => {
-  console.log(query.searchTerm);
-/*
-{email:{$regex:query.searchTerm,$options:i}
-{name:{$regex:query.searchTerm,$options:i}}
+const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
 
-*/
-let searchTerm = '';
-if(query?.searchTerm){
-  searchTerm=query.searchTerm as string
-}
+const queryObject = {...query}
+
+  /*
+  {email:{$regex:query.searchTerm,$options:i}
+  {name:{$regex:query.searchTerm,$options:i}}
+  
+  */
+
+console.log(query);
+
+  const studentSearchAbleFileds = ["email", "id", "name.firstName", "age"]
+
+  let searchTerm = '';
+  if (query?.searchTerm) {
+    searchTerm = query.searchTerm as string
+  }
+
+
+const searchQuery =  Student.find({
+  $or: studentSearchAbleFileds.map((field) => ({
+    [field]: { $regex: searchTerm, $options: "i" }
+  }))
+
+})
+
+// filtering
+
+const excludeFields = ["searchTerm"]
+
+excludeFields.forEach(elem=>delete queryObject[elem])
+
+console.log({query,queryObject});
 
 
 
-  const result = await Student.find({
-$or:["email","id","name.firstName","age"].map((field)=>({
-  [field]:{$regex:searchTerm,$options:"i"}
-}))
 
 
-  })
-    .populate('admissionSemester')
+  const result = await searchQuery.find(queryObject).populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
       populate: {
