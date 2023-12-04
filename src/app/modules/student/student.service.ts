@@ -34,7 +34,7 @@ const searchQuery =  Student.find({
 
 // filtering
 
-const excludeFields = ["searchTerm"]
+const excludeFields = ["searchTerm","sort","limit"]
 
 excludeFields.forEach(elem=>delete queryObject[elem])
 
@@ -44,7 +44,7 @@ console.log({query,queryObject});
 
 
 
-  const result = await searchQuery.find(queryObject).populate('admissionSemester')
+  const filterQuery =  searchQuery.find(queryObject).populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
       populate: {
@@ -52,7 +52,27 @@ console.log({query,queryObject});
       },
     });
 
-  return result;
+let sort = "-createdAt"
+
+if(query.sort){
+  sort= query.sort as string
+}
+
+const sortQuery =  filterQuery.sort(sort)
+
+let limit = 1;
+if(query.limit){
+limit = query.limit 
+}
+
+const limitQuery = await sortQuery.limit(limit)
+
+
+
+
+
+
+  return limitQuery;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
