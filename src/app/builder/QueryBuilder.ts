@@ -36,7 +36,7 @@ class QueryBuilder<T> {
 
 
     sort() {
-        const sort = this.query.sort || "-createdAt";
+        const sort = (this?.query?.sort as string)?.split(",")?.join(" ") || "-__v" || "-createdAt";
         this.modelQuery = this.modelQuery.sort(sort as string)
         return this
     }
@@ -50,9 +50,9 @@ class QueryBuilder<T> {
         return this
     }
 
-    fields(){
+    fields() {
         const fields = (this?.query?.fields as string)?.split(",")?.join(" ") || "-__v";
-        this.modelQuery= this.modelQuery.select(fields)
+        this.modelQuery = this.modelQuery.select(fields)
         return this
     }
 

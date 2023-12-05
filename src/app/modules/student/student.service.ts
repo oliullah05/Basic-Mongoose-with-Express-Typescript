@@ -120,8 +120,6 @@ const studentQuery = new QueryBuilder(Student.find().populate('admissionSemester
 
 const result = await studentQuery.modelQuery
 
-
-
 return result
 
 
