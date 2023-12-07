@@ -16,16 +16,31 @@ const findLastStudentId = async () => {
     })
     .lean();
 
+<<<<<<< HEAD
+=======
+  //2030 01 0001
+>>>>>>> ff1d0b838e0818095b1fc5dc4390ad6c77deea18
   return lastStudent?.id ? lastStudent.id : undefined;
 };
 
 export const generateStudentId = async (payload: TAcademicSemester) => {
+<<<<<<< HEAD
   let currentId = (0).toString();
   const lastStudentId = await findLastStudentId();
 
   const lastStudentSemesterCode = lastStudentId?.substring(4, 6);
   const lastStudentYear = lastStudentId?.substring(0, 4);
 
+=======
+  // first time 0000
+  //0001  => 1
+  let currentId = (0).toString(); // 0000 by deafult
+
+  const lastStudentId = await findLastStudentId();
+  // 2030 01 0001
+  const lastStudentSemesterCode = lastStudentId?.substring(4, 6); //01;
+  const lastStudentYear = lastStudentId?.substring(0, 4); // 2030
+>>>>>>> ff1d0b838e0818095b1fc5dc4390ad6c77deea18
   const currentSemesterCode = payload.code;
   const currentYear = payload.year;
 
@@ -34,7 +49,11 @@ export const generateStudentId = async (payload: TAcademicSemester) => {
     lastStudentSemesterCode === currentSemesterCode &&
     lastStudentYear === currentYear
   ) {
+<<<<<<< HEAD
     currentId = lastStudentId.substring(6);
+=======
+    currentId = lastStudentId.substring(6); // 00001
+>>>>>>> ff1d0b838e0818095b1fc5dc4390ad6c77deea18
   }
 
   let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');

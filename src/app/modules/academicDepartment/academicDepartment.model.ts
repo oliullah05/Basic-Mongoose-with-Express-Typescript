@@ -20,12 +20,19 @@ const academicDepartmentSchema = new Schema<TAcademicDepartment>(
   },
 );
 
-
 academicDepartmentSchema.pre('save', async function (next) {
   const isDepartmentExist = await AcademicDepartment.findOne({
     name: this.name,
   });
 
+<<<<<<< HEAD
+academicDepartmentSchema.pre('save', async function (next) {
+  const isDepartmentExist = await AcademicDepartment.findOne({
+    name: this.name,
+  });
+
+=======
+>>>>>>> ff1d0b838e0818095b1fc5dc4390ad6c77deea18
   if (isDepartmentExist) {
     throw new AppError(
       httpStatus.NOT_FOUND,

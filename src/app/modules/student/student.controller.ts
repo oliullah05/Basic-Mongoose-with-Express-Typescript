@@ -17,6 +17,12 @@ const getSingleStudent = catchAsync(async (req, res) => {
 });
 
 const getAllStudents: RequestHandler = catchAsync(async (req, res) => {
+<<<<<<< HEAD
+  const result = await StudentServices.getAllStudentsFromDB(req.query);
+=======
+
+
+
   const result = await StudentServices.getAllStudentsFromDB(req.query);
 
   sendResponse(res, {
@@ -27,6 +33,33 @@ const getAllStudents: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+const updateStudent = catchAsync(async (req, res) => {
+  const { studentId } = req.params;
+  const { student } = req.body;
+  const result = await StudentServices.updateStudentIntoDB(studentId, student);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student is updated succesfully',
+    data: result,
+  });
+});
+
+const deleteStudent = catchAsync(async (req, res) => {
+  const { studentId } = req.params;
+  const result = await StudentServices.deleteStudentFromDB(studentId);
+>>>>>>> ff1d0b838e0818095b1fc5dc4390ad6c77deea18
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student are retrieved succesfully',
+    data: result,
+  });
+});
+
+<<<<<<< HEAD
 const updateStudent = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { student } = req.body;
@@ -52,6 +85,8 @@ const deleteStudent = catchAsync(async (req, res) => {
   });
 });
 
+=======
+>>>>>>> ff1d0b838e0818095b1fc5dc4390ad6c77deea18
 export const StudentControllers = {
   getAllStudents,
   getSingleStudent,

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+<<<<<<< HEAD
 import { TErrorSources, TGenericErrorResponse } from '../interface/error';
 
 const handleDuplicateError = (err: any): TGenericErrorResponse => {
@@ -25,3 +26,29 @@ const handleDuplicateError = (err: any): TGenericErrorResponse => {
 };
 
 export default handleDuplicateError;
+=======
+
+import { TErrorSources, TGenericErrorResponse } from "../interface/error";
+
+export const handleDuplicateError =(err:any):TGenericErrorResponse=>{
+    const statusCode = 400;
+    const match = err.message.match(/name: "(.*?)"/);
+// console.log(err.message);
+    // Extract the department name or default to null if not found
+    const extractedMessage = match ? match[1] : null;
+    
+  
+
+
+const errorSources :TErrorSources =[{
+    path:"",
+    message:err?.message
+}]
+
+
+return{
+    statusCode,
+    message:`${extractedMessage} is alrady exits`,
+    errorSources,
+}}
+>>>>>>> ff1d0b838e0818095b1fc5dc4390ad6c77deea18

@@ -1,6 +1,9 @@
 import { Router } from 'express';
+<<<<<<< HEAD
 import { AdminRoutes } from '../modules/Admin/admin.route';
 import { FacultyRoutes } from '../modules/Faculty/faculty.route';
+=======
+>>>>>>> ff1d0b838e0818095b1fc5dc4390ad6c77deea18
 import { AcademicDepartmentRoutes } from '../modules/academicDepartment/academicDepartment.route';
 import { AcademicFacultyRoutes } from '../modules/academicFaculty/academicFaculty.route';
 import { AcademicSemesterRoutes } from '../modules/academicSemester/academicSemester.route';
