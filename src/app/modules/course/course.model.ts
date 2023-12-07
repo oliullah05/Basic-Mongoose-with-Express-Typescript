@@ -1,0 +1,46 @@
+
+import{ Schema, model } from "mongoose";
+import { TCourse, TPreRequisiteCourses } from "./course.interface";
+
+
+
+const preRequisiteCoursesSchema = new Schema<TPreRequisiteCourses>({
+course:{
+    type:Schema.Types.ObjectId,  
+},
+isDeleted:{
+    type:Boolean,
+    default:false
+}
+})
+
+
+const courseSchema = new Schema<TCourse>({
+    title: {
+        type: String,
+        required: [true, 'Title is required.'],
+        unique:true,
+        trim:true
+    },
+    prefix: {
+        type: String,
+        required: [true, 'Prefix is required.'],
+        trim:true
+    },
+    code: {
+        type: Number,
+        required: [true, 'Code is required.'],
+        trim:true
+    },
+    credits: {
+        type: Number,
+        required: [true, 'Credits is required.'],
+        trim:true
+    },
+preRequisiteCourses:[preRequisiteCoursesSchema]
+});
+
+
+const Course=model<TCourse>('Course', courseSchema);
+
+export default Course;

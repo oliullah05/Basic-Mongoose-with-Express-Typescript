@@ -4,11 +4,9 @@ import {
   AcademicSemesterName,
   Months,
 } from './academicSemester.constant';
-import { TAcademicSemseter } from './academicSemester.interface';
-import { AppError } from '../../errors/appErrors';
-import httpStatus from 'http-status';
+import { TAcademicSemester } from './academicSemester.interface';
 
-const acdemicSemesterSchema = new Schema<TAcademicSemseter>(
+const acdemicSemesterSchema = new Schema<TAcademicSemester>(
   {
     name: {
       type: String,
@@ -47,7 +45,7 @@ acdemicSemesterSchema.pre('save', async function (next) {
   });
 
   if (isSemesterExists) {
-    throw new AppError(403,'Semester is already exists !');
+    throw new Error('Semester is already exists !');
   }
   next();
 });
@@ -62,8 +60,6 @@ export const AcademicSemester = model<TAcademicSemseter>(
 // 2031 Autumn
 //2030 Autumn => XXX
 //2030 Fall => Created
-
-
 
 // Autumn 01
 // Summar 02

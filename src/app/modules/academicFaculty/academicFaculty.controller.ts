@@ -11,53 +11,53 @@ const createAcademicFaculty = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Academic Faculty is created succesfully',
+    message: 'Academic faculty is created succesfully',
     data: result,
   });
 });
 
-const getAllAcademicFacultys = catchAsync(async (req, res) => {
-  const result = await AcademicFacultyServices.getAllAcademicFacultyFromDB();
+const getAllAcademicFaculties = catchAsync(async (req, res) => {
+  const result = await AcademicFacultyServices.getAllAcademicFacultiesFromDB();
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Academic Facultys are retrieved successfully',
+    message: 'Academic faculties are retrieved successfully',
     data: result,
   });
 });
 
 const getSingleAcademicFaculty = catchAsync(async (req, res) => {
-  const { FacultyId } = req.params;
+  const { facultyId } = req.params;
   const result =
-    await AcademicFacultyServices.getSingleAcademicFacultyFromDB(FacultyId);
+    await AcademicFacultyServices.getSingleAcademicFacultyFromDB(facultyId);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Academic Faculty is retrieved succesfully',
+    message: 'Academic faculty is retrieved succesfully',
     data: result,
   });
 });
 
 const updateAcademicFaculty = catchAsync(async (req, res) => {
-  const { FacultyId } = req.params;
+  const { facultyId } = req.params;
   const result = await AcademicFacultyServices.updateAcademicFacultyIntoDB(
-    FacultyId,
+    facultyId,
     req.body,
   );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Academic Faculty is updated succesfully',
+    message: 'Academic faculty is updated succesfully',
     data: result,
   });
 });
 
 export const AcademicFacultyControllers = {
   createAcademicFaculty,
-  getAllAcademicFacultys,
+  getAllAcademicFaculties,
   getSingleAcademicFaculty,
   updateAcademicFaculty,
 };
