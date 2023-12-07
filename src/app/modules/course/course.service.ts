@@ -36,14 +36,16 @@ const deleteCourseFromDB = async (id: string) => {
 
 const updateCourseIntoDB  = async(id:string,payload:Partial<TCourse>)=>{
 const {preRequisiteCourses,...courseRemainingData} = payload;
-
-const updatedBasicCourseInfo = await Course.findOneAndUpdate(id,courseRemainingData,{
+console.log(id,11);
+const updatedBasicCourseInfo = await Course.findByIdAndUpdate(id,courseRemainingData,{
     new:true,
   runValidators:true
 })
 
 //check if there is any preRequisite courses to update
 if(preRequisiteCourses && preRequisiteCourses.length>0){
+
+
 //filter out the deletd files
 const deletedPreRequisites = preRequisiteCourses.filter(elem=>elem.course && elem.isDeleted).map(el=>el.course)
 const deletedPreRequisiteCoures = await Course.findByIdAndUpdate(id, {
@@ -53,18 +55,21 @@ const deletedPreRequisiteCoures = await Course.findByIdAndUpdate(id, {
   },
 )
 
+//filter out the new course filds
+const newPreRequisites = preRequisiteCourses?.filter(
+    (el) => el.course && !el.isDeleted
+  );
+
+
+const newPreRequisiteCourses = await Course.findByIdAndUpdate(id,{
+    $addToSet:{preRequisiteCourses:{$each:newPreRequisites}}
+})
+
 }
 
 
-
-
-
-
-
-
-
-
-return updatedBasicCourseInfo
+const result = await Course.findById(id).populate("preRequisiteCourses.course")
+  return result;
 }
 
 
