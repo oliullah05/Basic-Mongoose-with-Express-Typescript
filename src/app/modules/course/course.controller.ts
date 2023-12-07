@@ -18,7 +18,7 @@ const createCourse = catchAsync(async (req, res) => {
 });
 
 const getAllCourse = catchAsync(async (req, res) => {
-  const result = await CourseServices.allCoursesIntoDB();
+  const result = await CourseServices.allCoursesIntoDB(req.query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -29,7 +29,7 @@ const getAllCourse = catchAsync(async (req, res) => {
 });
 
 const getSingleCourse = catchAsync(async (req, res) => {
-  const { facultyId: id } = req.params;
+  const { id } = req.params;
   const result =
     await CourseServices.getSingleCourseIntoDB(id);
 
@@ -44,9 +44,9 @@ const getSingleCourse = catchAsync(async (req, res) => {
 
 
 const deleteCourse = catchAsync(async (req, res) => {
-  const { facultyId: id } = req.params;
+  const {  id } = req.params;
   const result =
-    await CourseServices.deleteCourseFromDB(id);
+ await CourseServices.deleteCourseFromDB(id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
