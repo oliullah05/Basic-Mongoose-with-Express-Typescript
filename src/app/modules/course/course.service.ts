@@ -1,10 +1,11 @@
 import mongoose from "mongoose"
 import QueryBuilder from "../../builder/QueryBuilder"
 import { CourseSearchableFields } from "./course.const"
-import { TCourse } from "./course.interface"
-import Course from "./course.model"
+import { TCourse, TCourseFaculties } from "./course.interface"
+import Course, { CourseFaculty } from "./course.model"
 import AppError from "../../errors/AppError"
 import httpStatus from "http-status"
+import catchAsync from "../../utils/catchAsync"
 
 const createCourseIntoDB = async (payload: TCourse) => {
     const result = await Course.create(payload)
@@ -36,6 +37,10 @@ const deleteCourseFromDB = async (id: string) => {
     );
     return result
 }
+
+
+
+
 
 const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
     const { preRequisiteCourses, ...courseRemainingData } = payload;
@@ -114,6 +119,7 @@ if(!updatedBasicCourseInfo){
 catch(err){
 session.abortTransaction()
 session.endSession()
+throw new AppError(httpStatus.BAD_REQUEST,"fail to update course")
 }
 
     const result = await Course.findById(id).populate("preRequisiteCourses.course")
@@ -122,11 +128,37 @@ session.endSession()
 
 
 
+const assignFacultiesWithCourseIntoDB = async(id:string,payload:Partial<TCourseFaculties>)=>{
+
+const result = await CourseFaculty.findByIdAndUpdate(id,{
+    $addToSet:{faculties:{$each:payload}}
+},{
+    upsert:true,
+    new:true
+})
+
+return result
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const CourseServices = {
     createCourseIntoDB,
     allCoursesIntoDB,
     getSingleCourseIntoDB,
     deleteCourseFromDB,
-    updateCourseIntoDB
-
+    updateCourseIntoDB,
+    assignFacultiesWithCourseIntoDB
 }
