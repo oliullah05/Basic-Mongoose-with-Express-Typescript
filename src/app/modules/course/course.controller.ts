@@ -70,7 +70,7 @@ const {faculties}= req.body
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Course is deleted succesfully',
+    message: 'Faculties updated in Course is done succesfully',
     data: result,
   });
 });

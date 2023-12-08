@@ -5,7 +5,7 @@ import { TCourse, TCourseFaculties } from "./course.interface"
 import Course, { CourseFaculty } from "./course.model"
 import AppError from "../../errors/AppError"
 import httpStatus from "http-status"
-import catchAsync from "../../utils/catchAsync"
+
 
 const createCourseIntoDB = async (payload: TCourse) => {
     const result = await Course.create(payload)
@@ -131,6 +131,8 @@ throw new AppError(httpStatus.BAD_REQUEST,"fail to update course")
 const assignFacultiesWithCourseIntoDB = async(id:string,payload:Partial<TCourseFaculties>)=>{
 
 const result = await CourseFaculty.findByIdAndUpdate(id,{
+
+    course:id,
     $addToSet:{faculties:{$each:payload}}
 },{
     upsert:true,
