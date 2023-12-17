@@ -6,6 +6,26 @@ import { SemesterRegistration } from "./semesterRegistration.model";
 
 const createSemesterRegistrationIntoDB = async (payload: TSemesterRegistration) => {
 
+
+//check if there any registered semester that is alrady "UPCOMING" or "ONGOING"
+
+const isThereAnyUpcomingOrOngoing =await SemesterRegistration.findOne({
+  $or:[
+    {
+      status:"UPCOMING"
+    },
+    {
+      status:"ONGOING"
+    }
+  ]
+})
+
+
+if(isThereAnyUpcomingOrOngoing){
+  throw new AppError(404, `there is alrady a ${isThereAnyUpcomingOrOngoing.status} semester register `)
+}
+
+
   //check if the AcademicSemester exits
   const isAcademicSemesterExits = await AcademicSemester.findById(payload.academicSemester)
   if (!isAcademicSemesterExits) {
@@ -45,9 +65,24 @@ const getSingleSemesterRegistrationsFromDB = async (id:string) => {
 
 
 
-const updateSemesterRegistrationIntoDB = async (id:string) => {
+const updateSemesterRegistrationIntoDB = async (id:string,payload:Partial<TSemesterRegistration>) => {
+
+//check  if the requested semester register is alrady exits
+
+const isAcademicSemesterExits = await SemesterRegistration.findById(id)
+if (!isAcademicSemesterExits) {
+  throw new AppError(404, "AcademicSemester is not found")
+}
 
 
+
+
+//if the requested semester registration is ended ,we will not update anything
+
+const requestedSemisterStatus = isAcademicSemesterExits?.status;
+if(requestedSemisterStatus=="ENDED"){
+  throw new AppError(404,"this Semester Registration ended.. can't update ")
+}
 
 
  };
