@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import { TSemesterRegistration } from './semesterRegistration.interface';
 import { SemesterRegistionStatus } from './semesterRegistration.const';
 
@@ -10,7 +10,7 @@ const semesterRegistrationSchema = new mongoose.Schema<TSemesterRegistration>(
       type:Schema.Types.ObjectId,
       unique:true,
       required:true,
-      ref:"AcademicSemister"
+      ref:"AcademicSemester"
     },
     startDate:{
       type:Date,
@@ -41,7 +41,7 @@ const semesterRegistrationSchema = new mongoose.Schema<TSemesterRegistration>(
   }
 );
 
-export const SemesterRegistration = mongoose.model<TSemesterRegistration>(
+export const SemesterRegistration = model<TSemesterRegistration>(
   'SemesterRegistration',
   semesterRegistrationSchema,
 );
