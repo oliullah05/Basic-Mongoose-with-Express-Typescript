@@ -4,7 +4,7 @@ import { days } from "./offeredCourse.const";
 
 const offeredCourseSchema = new Schema<TofferedCourse>(
     {
-      SemesterRegistration: {
+      semesterRegistration: {
         type: Schema.Types.ObjectId,
         required: true,
         ref:"SemesterRegistration"
@@ -42,11 +42,11 @@ const offeredCourseSchema = new Schema<TofferedCourse>(
         type: Number,
         required: true,
       },
-      days: {
+      days: [{
         type: String,
         enum: days,
         required: true,
-      },
+      }],
       startTime: {
         type: String,
         required: true,

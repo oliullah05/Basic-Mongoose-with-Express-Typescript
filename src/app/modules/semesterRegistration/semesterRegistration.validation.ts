@@ -23,8 +23,6 @@ const updateSemesterRegistrationValidationSchema = z.object({
     endDate:z.string().datetime().optional(),
     minCredit:z.number().optional(),
     maxCredit:z.number().optional()
-
-
   }).optional(),
 });
 
