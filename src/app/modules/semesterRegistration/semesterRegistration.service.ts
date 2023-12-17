@@ -1,6 +1,7 @@
 import QueryBuilder from "../../builder/QueryBuilder";
 import AppError from "../../errors/AppError";
 import { AcademicSemester } from "../academicSemester/academicSemester.model";
+import { RegistionStatus } from "./semesterRegistration.const";
 import { TSemesterRegistration } from "./semesterRegistration.interface";
 import { SemesterRegistration } from "./semesterRegistration.model";
 
@@ -12,10 +13,10 @@ const createSemesterRegistrationIntoDB = async (payload: TSemesterRegistration) 
 const isThereAnyUpcomingOrOngoing =await SemesterRegistration.findOne({
   $or:[
     {
-      status:"UPCOMING"
+      status:RegistionStatus.UPCOMING
     },
     {
-      status:"ONGOING"
+      status:RegistionStatus.ONGOING
     }
   ]
 })
@@ -79,12 +80,39 @@ if (!isAcademicSemesterExits) {
 
 //if the requested semester registration is ended ,we will not update anything
 
-const requestedSemisterStatus = isAcademicSemesterExits?.status;
-if(requestedSemisterStatus=="ENDED"){
+const currentSemisterStatus = isAcademicSemesterExits?.status;
+const requestedStatus = payload.status;
+if(currentSemisterStatus===RegistionStatus.ENDED){
   throw new AppError(404,"this Semester Registration ended.. can't update ")
 }
 
 
+
+
+// UPCOMING>>ONGOING>>>ENDED
+if(currentSemisterStatus===RegistionStatus.UPCOMING && requestedStatus===RegistionStatus.ENDED){
+
+    throw new AppError(404,`you can't directly update from ${currentSemisterStatus} to ${requestedStatus}`)
+
+}
+
+
+
+
+if(currentSemisterStatus===RegistionStatus.ONGOING && requestedStatus===RegistionStatus.UPCOMING){
+
+    throw new AppError(404,`you can't directly update from ${currentSemisterStatus} to ${requestedStatus}`)
+
+}
+
+
+const result = await SemesterRegistration.findByIdAndUpdate(id,
+ payload,{
+  new:true,
+  runValidators:true
+})
+
+return result
  };
 
 
