@@ -12,10 +12,6 @@ throw new AppError(404,"AcademicSemester not found")
 }
 
 
-
-
-
-
 //check duplicate semesterRegistration 
 
 const checkDuplicateSemisterRegistration = await SemesterRegistration.findOne({
@@ -25,8 +21,8 @@ if(checkDuplicateSemisterRegistration){
   throw new AppError(409,"This Semester Registration is alrady register")
 }
 
-
-
+const result = await SemesterRegistration.create(payload)
+return result
 };
 
 const getAllSemesterRegistrationsFromDB = async () => {};
