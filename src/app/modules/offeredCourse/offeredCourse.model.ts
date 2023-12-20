@@ -12,7 +12,7 @@ const offeredCourseSchema = new Schema<TofferedCourse>(
       academicSemester: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref:"AcademicSemester"
+        ref:"AcademicSemester"  
       },
       academicFaculty: {
         type: Schema.Types.ObjectId,
