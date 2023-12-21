@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 
-type Days = 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat';
+export type Days = 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat';
 
 export type TofferedCourse = {
     semesterRegistration: Types.ObjectId;
@@ -14,4 +14,10 @@ export type TofferedCourse = {
     days: Days[];
     startTime: string;
     endTime: string;
+}
+export type TSchedule = {
+    days:Days[],
+    startTime:string,
+    endTime:string
+
 }

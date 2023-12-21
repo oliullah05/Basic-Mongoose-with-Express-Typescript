@@ -7,6 +7,7 @@ import { AcademicFaculty } from "../academicFaculty/academicFaculty.model";
 import { SemesterRegistration } from "../semesterRegistration/semesterRegistration.model";
 import { TofferedCourse } from "./offeredCourse.interface";
 import OfferedCourse from "./offeredCourse.model";
+import { hasTimeConflict } from "./offeredCourse.utils";
 
 
 const createOfferedCourseIntoDB = async (payload: TofferedCourse) => {
@@ -113,24 +114,11 @@ const newSchedule = {
 // "newStartTime": "13:44",
 // "newEndTime": "13:55"
 
-
-
-assignSchedule.forEach(Schedule=>{
-  const exitingStartTime = new Date(`1970-01-01T${Schedule.startTime}`)
-  const exitingEndTime = new Date(`1970-01-01T${Schedule.endTime}`)
-  const newStartTime = new Date(`1970-01-01T${newSchedule.startTime}`)
-  const newEndTime = new Date(`1970-01-01T${newSchedule.endTime}`)
-
-if(newStartTime <exitingEndTime && newEndTime>exitingStartTime){
+if(hasTimeConflict(assignSchedule,newSchedule)){
   throw new AppError(409,"This faculty is not available at that time . Chosse other time or day")
-
+  
 }
 
-
-
-})
-
-console.log(assignSchedule,days,555);
 
 
 
