@@ -16,7 +16,7 @@ const academicDepartmentSchema = new Schema<TAcademicDepartment>(
     },
   },
   {
-    timestamps: true,
+    timestamps: true
   },
 );
 

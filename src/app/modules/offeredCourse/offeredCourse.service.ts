@@ -14,6 +14,7 @@ const createOfferedCourseIntoDB = async (payload: TofferedCourse) => {
     academicFaculty,
     academicDepartment,
     course,
+    section,
     faculty } = payload;
 
 const isSemesterRegistrationExits =await SemesterRegistration.findById(semesterRegistration)
@@ -52,6 +53,34 @@ const isFacultyExits =await Faculty.findById(faculty)
 
 if(!isFacultyExits){
   throw new AppError(404,"faculty not found")
+}
+
+
+// check if the department belong to the faculty 
+
+const isTheDepartmentBelongToFaculty = await AcademicDepartment.findOne({
+  academicFaculty,
+  _id:academicDepartment
+})
+
+
+if(!isTheDepartmentBelongToFaculty){
+  throw new AppError(400,`the ${isacAdemicDepartmentExits.name} is not belong to this ${isAcademicFacultyExits.name} `)
+}
+
+
+
+// if the same offered course , same section , same register semester exits
+
+
+const isSameOfferedCourseWithSameSemesterRegisterWithSameSection = await OfferedCourse.findOne({
+  section,
+  semesterRegistration,
+  course
+})
+
+if(isSameOfferedCourseWithSameSemesterRegisterWithSameSection){
+  throw new AppError(400,`Offered course with same section is alrady exits `)
 }
 
 
