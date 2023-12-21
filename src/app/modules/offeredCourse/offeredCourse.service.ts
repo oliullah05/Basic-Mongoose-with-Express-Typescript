@@ -119,16 +119,11 @@ if(hasTimeConflict(assignSchedule,newSchedule)){
   
 }
 
+const academicSemester = isSemesterRegistrationExits.academicSemester
 
 
-
-
-
-// const academicSemester = isSemesterRegistrationExits.academicSemester
-
-
-//   const result = OfferedCourse.create({...payload,academicSemester})
-//   return result;
+  const result = OfferedCourse.create({...payload,academicSemester})
+  return result;
 
 };
 
@@ -171,8 +166,63 @@ const getSingleOfferedCourseFromDB = async (id: string) => {
 
 const updateOfferedCourseIntoDB = async (
   id: string,
-  payload: Partial<TOfferedCourse>,
-) => { };
+  payload: Pick<TofferedCourse,"faculty"|"startTime"|"endTime"|"days">,
+) => {
+const {faculty,days,startTime,endTime}=payload;
+  const isOfferedCourseExits =await OfferedCourse.findById(id)
+
+  if(!isOfferedCourseExits){
+    throw new AppError(404,"Offered course not found")
+  }
+  const isFacultyExits =await Faculty.findById(faculty)
+
+  if(!isFacultyExits){
+    throw new AppError(404,"Faculty not found")
+  }
+  
+const semesterRegistration = isOfferedCourseExits.semesterRegistration
+
+const semesterRegistrationStatus =await SemesterRegistration.findById(semesterRegistration)
+
+
+if(semesterRegistrationStatus?.status!=="UPCOMING"){
+  throw new AppError(404,`you can't update this offerd course as it is ${semesterRegistrationStatus?.status}`)
+}
+
+// get the schedule's of the faculties 
+
+const assignSchedule = await OfferedCourse.find({
+  semesterRegistration,
+  faculty,
+  days:{$in:days}
+}).select("days startTime endTime")
+
+const newSchedule = {
+  days,
+  startTime,
+  endTime
+}
+// 10:45,11:45 exit
+// 11:00,12:00 new
+
+// "exitingstartTime": "13:44",
+// "exitingendTime": "13:55"
+
+// "newStartTime": "13:44",
+// "newEndTime": "13:55"
+
+if(hasTimeConflict(assignSchedule,newSchedule)){
+  throw new AppError(409,"This faculty is not available at that time . Chosse other time or day")
+}
+
+const result = await OfferedCourse.findByIdAndUpdate(id,payload,{
+  new:true,
+  runValidators:true
+})
+return result
+
+
+ };
 
 export const OfferedCourseServices = {
   createOfferedCourseIntoDB,
