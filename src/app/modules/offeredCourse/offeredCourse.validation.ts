@@ -28,7 +28,6 @@ const createOfferedCourseSchema = z.object({
           message:"Invalid Time Formet . Expected HH:MM in 24 hour format"
         }),
       }).refine(body=>{
-        console.log(body.startTime,body.endTime);
         const start = new Date(`1970-01-01T${body.startTime}:00`)
         const end = new Date(`1970-01-01T${body.endTime}`)
       return end>start

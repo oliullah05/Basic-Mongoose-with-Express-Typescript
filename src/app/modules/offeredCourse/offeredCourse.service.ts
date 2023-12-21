@@ -15,7 +15,14 @@ const createOfferedCourseIntoDB = async (payload: TofferedCourse) => {
     academicDepartment,
     course,
     section,
-    faculty } = payload;
+    faculty ,
+    days,
+    startTime,
+    endTime
+  
+  
+  
+  } = payload;
 
 const isSemesterRegistrationExits =await SemesterRegistration.findById(semesterRegistration)
 
@@ -84,13 +91,70 @@ if(isSameOfferedCourseWithSameSemesterRegisterWithSameSection){
 }
 
 
-const academicSemester = isSemesterRegistrationExits.academicSemester
+// get the schedule's of the faculties 
+
+const assignSchedule = await OfferedCourse.find({
+  semesterRegistration,
+  academicFaculty,
+  days:{$in:days}
+}).select("days startTime endTime")
+
+const newSchedule = {
+  days,
+  startTime,
+  endTime
+}
+// 10:45,11:45 exit
+// 11:00,12:00 new
+
+// "exitingstartTime": "13:44",
+// "exitingendTime": "13:55"
+
+// "newStartTime": "13:44",
+// "newEndTime": "13:55"
 
 
-  const result = OfferedCourse.create({...payload,academicSemester})
-  return result;
+
+assignSchedule.forEach(Schedule=>{
+  const exitingStartTime = new Date(`1970-01-01T${Schedule.startTime}`)
+  const exitingEndTime = new Date(`1970-01-01T${Schedule.endTime}`)
+  const newStartTime = new Date(`1970-01-01T${newSchedule.startTime}`)
+  const newEndTime = new Date(`1970-01-01T${newSchedule.endTime}`)
+
+if(newStartTime <exitingEndTime && newEndTime>exitingStartTime){
+  throw new AppError(409,"This faculty is not available at that time . Chosse other time or day")
+
+}
+
+
+
+})
+
+console.log(assignSchedule,days,555);
+
+
+
+
+
+// const academicSemester = isSemesterRegistrationExits.academicSemester
+
+
+//   const result = OfferedCourse.create({...payload,academicSemester})
+//   return result;
 
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 const getAllOfferedCoursesFromDB = async (query: Record<string, unknown>) => {
   const offeredCourseQuery = new QueryBuilder(OfferedCourse.find(), query)
@@ -103,6 +167,8 @@ const getAllOfferedCoursesFromDB = async (query: Record<string, unknown>) => {
   return result;
 };
 
+
+
 const getSingleOfferedCourseFromDB = async (id: string) => {
   const offeredCourse = await OfferedCourse.findById(id);
 
@@ -112,6 +178,8 @@ const getSingleOfferedCourseFromDB = async (id: string) => {
 
   return offeredCourse;
 };
+
+
 
 const updateOfferedCourseIntoDB = async (
   id: string,
