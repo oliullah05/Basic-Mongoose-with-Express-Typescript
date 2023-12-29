@@ -1,13 +1,11 @@
 import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import { FacultyControllers } from './faculty.controller';
-import { createFacultyValidationSchema, updateFacultyValidationSchema } from './faculty.validation';
+import { updateFacultyValidationSchema } from './faculty.validation';
 
 const router = express.Router();
 
 router.get('/:id', FacultyControllers.getSingleFaculty);
-// validateRequest(createFacultyValidationSchema)
-router.post('/', FacultyControllers.createFaculty);
 
 router.patch(
   '/:id',
