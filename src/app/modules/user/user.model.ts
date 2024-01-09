@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
 import config from '../../config';
 import { TUser, UserModel } from './user.interface';
-const userSchema = new Schema<TUser,UserModel>(
+const userSchema = new Schema<TUser, UserModel>(
   {
     id: {
       type: String,
@@ -20,6 +20,10 @@ const userSchema = new Schema<TUser,UserModel>(
     role: {
       type: String,
       enum: ['student', 'faculty', 'admin'],
+    },
+    passwordChangeAt: {
+      type: Date,
+      
     },
     status: {
       type: String,
@@ -53,15 +57,15 @@ userSchema.post('save', function (doc, next) {
   next();
 });
 
-userSchema.statics.isUserExitsByCustomId= async function (id:string){
-  return await User.findOne({id}).select('+password')
+userSchema.statics.isUserExitsByCustomId = async function (id: string) {
+  return await User.findOne({ id }).select('+password')
 
 }
 
-userSchema.statics.isPasswordMatched = async function(plainTextPassword,hashedPassword){
- return await bcrypt.compare(plainTextPassword,hashedPassword)
+userSchema.statics.isPasswordMatched = async function (plainTextPassword, hashedPassword) {
+  return await bcrypt.compare(plainTextPassword, hashedPassword)
 }
 
 
 
-export const User = model<TUser,UserModel>('User', userSchema);
+export const User = model<TUser, UserModel>('User', userSchema);

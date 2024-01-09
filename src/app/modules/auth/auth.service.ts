@@ -1,11 +1,10 @@
-
 import config from "../../config";
 import AppError from "../../errors/AppError";
-import { TUser } from "../user/user.interface";
 import { User } from "../user/user.model";
 import { TLogInUser } from "./auth.interface";
-import jwt from "jsonwebtoken"
-
+import jwt, { JwtPayload } from "jsonwebtoken"
+import bcrypt from "bcrypt"
+import { configDotenv } from "dotenv";
 const loginUser = async (payload: TLogInUser) => {
 
 
@@ -60,11 +59,55 @@ return{
 
 
 
-const changePassword = async(user:{userId:string,role:string},payload:TUser)=>{
-const result = await User.findOneAndUpdate({
-  id:user.userId,
-  role:user.role
+const changePassword = async(userData:JwtPayload,payload:{
+  oldPassword:string,
+  newPassword:string
+})=>{
+//if the user exits
+const user = await User.isUserExitsByCustomId(userData.userId)
+
+if(!user){
+  throw new AppError(404,"user not found")
+}
+
+// check if the user is alrady deleted
+
+if(user.isDeleted){
+  throw new AppError(403,"user is deleted")
+}
+
+// check if the user is alrady blocked
+
+if(user.status==="blocked"){
+  throw new AppError(403,"user is blocked")
+}
+
+// checking if the password is correct
+
+
+const isPasswordMatched =await  User.isPasswordMatched(payload.oldPassword,user.password)
+if(!isPasswordMatched){
+  throw new AppError(403,"password do not match")
+}
+
+
+//hasedNewPassword
+const newHashedPassword =await bcrypt.hash(payload.newPassword,Number(config.bcrypt_salt_rounds))
+
+
+
+
+
+ await User.findOneAndUpdate({
+  id:userData.userId,
+  role:userData.role
+},{
+  password:newHashedPassword,
+  needsPasswordChange:false,
+  passwordChangeAt:new Date()
 })
+console.log("object");
+return null;
 }
 
 

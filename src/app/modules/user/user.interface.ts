@@ -9,6 +9,7 @@ export type TUser = {
   role: 'admin' | 'student' | 'faculty';
   status: 'in-progress' | 'blocked';
   isDeleted: boolean;
+  passwordChangeAt?:Date
 };
 export interface UserModel extends Model<TUser> {
   // myStaticMethod(): number
