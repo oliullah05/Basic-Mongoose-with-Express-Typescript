@@ -39,7 +39,7 @@ if(!isPasswordMatched){
 // require('crypto').randomBytes(64).toString('hex')
 
 const jwtPayload ={
-  id:user.id,
+  userId:user.id,
   role:user.role
 }
 
