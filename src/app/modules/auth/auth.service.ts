@@ -7,11 +7,20 @@ const loginUser = async (payload: TLogInUser) => {
 
 
 //if the user exits
-const isUserExits = await User.findOne({id:payload.id})
+const user = await User.isUserExitsByCustomId(payload.id)
 
-if(!isUserExits){
+if(!user){
   throw new AppError(404,"user not found")
 }
+
+
+
+
+
+
+
+
+/*
 
 // check if the user is alrady deleted
 
@@ -24,10 +33,17 @@ if(isUserExits.isDeleted){
 if(isUserExits.status==="blocked"){
   throw new AppError(403,"user is blocked")
 }
+*/
+
+
 
 // checking if the password is correct
-const isPasswordMatched =await  bcrypt.compare(payload.password,isUserExits.password)
-console.log(isPasswordMatched,44);
+
+
+const isPasswordMatched =await  User.isPasswordMatched(payload.password,user.password)
+if(!isPasswordMatched){
+  throw new AppError(403,"password do not match")
+}
 
 
 
