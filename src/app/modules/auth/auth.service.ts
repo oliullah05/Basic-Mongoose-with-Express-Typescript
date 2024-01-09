@@ -50,7 +50,10 @@ const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, { e
 
 // Access grented : send access token , refresh token
 
-
+return{
+  accessToken,
+  needsPasswordChange:user.needsPasswordChange
+}
 
   };
   export const AuthServices = {
