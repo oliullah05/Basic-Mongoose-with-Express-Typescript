@@ -1,6 +1,7 @@
 
 import config from "../../config";
 import AppError from "../../errors/AppError";
+import { TUser } from "../user/user.interface";
 import { User } from "../user/user.model";
 import { TLogInUser } from "./auth.interface";
 import jwt from "jsonwebtoken"
@@ -56,8 +57,24 @@ return{
 }
 
   };
+
+
+
+const changePassword = async(user:{userId:string,role:string},payload:TUser)=>{
+const result = await User.findOneAndUpdate({
+  id:user.userId,
+  role:user.role
+})
+}
+
+
+
+
+
+
   export const AuthServices = {
-    loginUser
+    loginUser,
+    changePassword
   };
 
   
