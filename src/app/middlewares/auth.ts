@@ -24,6 +24,9 @@ const auth = (...requiredRules: TUserRole[]) => {
         const decoded = jwt.verify(token, config.jwt_access_secret as string) as JwtPayload;
 
         const {role,userId,iat} = decoded
+
+
+
         //if the user exits
         const user = await User.isUserExitsByCustomId(userId)
 
@@ -44,7 +47,11 @@ const auth = (...requiredRules: TUserRole[]) => {
         }
 
 
+        if(user.passwordChangeAt && User.isJWTIssedBeforePasswordChanged(user.passwordChangeAt,iat as number)){
+            throw new AppError(403, "You are not authorized!")
+        }
 
+ 
         if (requiredRules && !requiredRules.includes(role)) {
             throw new AppError(403, "You are not authorized!")
         }

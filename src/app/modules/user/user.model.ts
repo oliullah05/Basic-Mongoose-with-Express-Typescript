@@ -68,8 +68,11 @@ userSchema.statics.isPasswordMatched = async function(plainTextPassword,hashedPa
 
 
 
-userSchema.statics.isJWTIssedBeforePasswordChanged=function(passwordChangedTimeStamp,JwtissuedTimeStamp){
-return passwordChangedTimeStamp>JwtissuedTimeStamp
+userSchema.statics.isJWTIssedBeforePasswordChanged=function(passwordChangedTimeStamp:Date,JwtissuedTimeStamp:number){
+
+  const passwordChangedTime = new Date(passwordChangedTimeStamp).getTime()/1000;
+  return (passwordChangedTime>JwtissuedTimeStamp);
+// return passwordChangedTimeStamp>JwtissuedTimeStamp
 }
 
 export const User = model<TUser,UserModel>('User', userSchema);
