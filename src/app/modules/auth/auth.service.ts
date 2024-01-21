@@ -4,6 +4,7 @@ import AppError from "../../errors/AppError";
 import { User } from "../user/user.model";
 import { TLogInUser } from "./auth.interface";
 import bycrpt from "bcrypt"
+import { createToken } from "./auth.utils";
 const loginUser = async (payload: TLogInUser) => {
 
 
@@ -49,11 +50,17 @@ const loginUser = async (payload: TLogInUser) => {
   }
 
 
-  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, { expiresIn: "10d" })
+  const accessToken = createToken(jwtPayload,config.jwt_access_secret as string,config.jwt_acess_exparire_in as string)
+
+
+
+
+  const refreshToken = createToken(jwtPayload,config.jwt_refresh_secret as string,config.jwt_refresh_exparie_in as string)
 
   return {
     accessToken: accessToken,
-    needsPasswordChange: user.needsPasswordChange
+    needsPasswordChange: user.needsPasswordChange,
+    refreshToken
   }
 
 };
