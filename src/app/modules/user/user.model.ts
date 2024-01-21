@@ -11,7 +11,7 @@ const userSchema = new Schema<TUser,UserModel>(
     },
     password: {
       type: String,
-      required: true,
+      required: true
     },
     needsPasswordChange: {
       type: Boolean,
@@ -20,6 +20,10 @@ const userSchema = new Schema<TUser,UserModel>(
     role: {
       type: String,
       enum: ['student', 'faculty', 'admin'],
+    },
+    passwordChangeAt: {
+      type: Date,
+      
     },
     status: {
       type: String,
