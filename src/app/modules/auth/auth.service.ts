@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../../config";
 import AppError from "../../errors/AppError";
 import { User } from "../user/user.model";
@@ -13,7 +13,6 @@ const user = await User.isUserExitsByCustomId(payload.id)
 if(!user){
   throw new AppError(404,"user not found")
 }
-
 
 
 
@@ -68,8 +67,24 @@ return {
 }
 
   };
+
+
+const changePassword =(user:JwtPayload,payload)=>{
+const result = User.findOneAndUpdate({
+  id:user.userId,
+  role:user.role
+})
+
+}
+
+
+
+
+
+
   export const AuthServices = {
-    loginUser
+    loginUser,
+    changePassword
   };
 
   
