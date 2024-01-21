@@ -4,6 +4,7 @@ import AppError from "../errors/AppError";
 import jwt, { JwtPayload } from "jsonwebtoken"
 import config from "../config";
 import { TUserRole } from "../modules/user/user.interface";
+import { User } from "../modules/user/user.model";
 
 
 
@@ -17,26 +18,43 @@ const auth = (...requiredRules: TUserRole[]) => {
             throw new AppError(401, "You are not authorized!")
         }
 
-
         // check if the token is valid
-        const verifyToken = jwt.verify(token, config.jwt_access_secret as string, function (err, decoded) {
-            if (err) {
-                throw new AppError(401, "You are not authorized!")
-            }
-
-            // checking role 
-            const role = (decoded as JwtPayload)?.role
-
-            if (requiredRules && !requiredRules.includes(role)) {
-                throw new AppError(403, "You are not authorized!")
-            }
 
 
+        const decoded = jwt.verify(token, config.jwt_access_secret as string) as JwtPayload;
 
-            // 
-            req.user = decoded as JwtPayload;
-            next()
-        })
+        const {role,userId,iat} = decoded
+        //if the user exits
+        const user = await User.isUserExitsByCustomId(userId)
+
+        if (!user) {
+            throw new AppError(404, "user not found")
+        }
+
+        // check if the user is alrady deleted
+
+        if (user.isDeleted) {
+            throw new AppError(403, "user is deleted")
+        }
+
+        // check if the user is alrady blocked
+
+        if (user.status === "blocked") {
+            throw new AppError(403, "user is blocked")
+        }
+
+
+
+        if (requiredRules && !requiredRules.includes(role)) {
+            throw new AppError(403, "You are not authorized!")
+        }
+
+
+        // 
+        req.user = decoded as JwtPayload;
+        next()
+
+
 
 
     })
