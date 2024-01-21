@@ -7,10 +7,12 @@ import { UserControllers } from './user.controller';
 import auth from '../../middlewares/auth';
 import { USER_ROLE } from './user.const';
 
+
 const router = express.Router();
 
 router.post(
-  '/create-student',auth(USER_ROLE.admin),
+  '/create-student',
+  // auth(USER_ROLE.admin),
   validateRequest(createStudentValidationSchema),
   UserControllers.createStudent,
 );
@@ -23,6 +25,7 @@ router.post(
 
 router.post(
   '/create-admin',
+  auth(USER_ROLE.admin),
   validateRequest(createAdminValidationSchema),
   UserControllers.createAdmin,
 );

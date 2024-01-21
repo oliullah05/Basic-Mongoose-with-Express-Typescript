@@ -3,10 +3,11 @@ import catchAsync from "../utils/catchAsync"
 import AppError from "../errors/AppError";
 import jwt, { JwtPayload } from "jsonwebtoken"
 import config from "../config";
+import { TUserRole } from "../modules/user/user.interface";
 
 
 
-const auth = () => {
+const auth = (...requiredRules: TUserRole[]) => {
     return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
         const token = req.headers.authorization;
 
@@ -23,12 +24,21 @@ const auth = () => {
                 throw new AppError(401, "You are not authorized!")
             }
 
+            // checking role 
+            const role = (decoded as JwtPayload)?.role
+
+            if (requiredRules && !requiredRules.includes(role)) {
+                throw new AppError(403, "You are not authorized!")
+            }
+
+
+
             // 
-            req.user =decoded as JwtPayload;
+            req.user = decoded as JwtPayload;
             next()
         })
 
-        
+
     })
 }
 
