@@ -206,10 +206,10 @@ const resetToken = createToken(jwtPayload,
   "10m")
 
 
-const resetUILink = `http://localhost:5173/api/v1/id=${user.id}&token=${resetToken}`
-console.log(resetUILink);
+const resetUILink = `${config.reset_password_ui_link}id=${user.id}&token=${resetToken}`
 
-sendEmail()
+
+sendEmail(user.email,resetUILink)
 }
 
 
