@@ -173,65 +173,87 @@ const refreshToken = async (token: string) => {
 
 }
 
-const forgetPassword = async(userId:string)=>{
-//if the user exits
-const user = await User.isUserExitsByCustomId(userId)
+const forgetPassword = async (userId: string) => {
+  //if the user exits
+  const user = await User.isUserExitsByCustomId(userId)
 
-if (!user) {
-  throw new AppError(404, "user not found")
+  if (!user) {
+    throw new AppError(404, "user not found")
+  }
+
+  // check if the user is alrady deleted
+
+  if (user.isDeleted) {
+    throw new AppError(403, "user is deleted")
+  }
+
+  // check if the user is alrady blocked
+
+  if (user.status === "blocked") {
+    throw new AppError(403, "user is blocked")
+  }
+
+  // create token and send to the client
+
+  const jwtPayload = {
+    userId: user.id,
+    role: user.role
+  }
+
+
+  const resetToken = createToken(jwtPayload,
+    config.jwt_access_secret as string,
+    "10m")
+
+
+  const resetUILink = `${config.reset_password_ui_link}id=${user.id}&token=${resetToken}`
+
+
+  sendEmail(user.email, resetUILink)
 }
 
-// check if the user is alrady deleted
 
-if (user.isDeleted) {
-  throw new AppError(403, "user is deleted")
-}
+const resetPassword = async (payload: { id: string, newPassword: string }, token: string) => {
+  //if the user exits
+  const user = await User.isUserExitsByCustomId(payload.id)
 
-// check if the user is alrady blocked
+  if (!user) {
+    throw new AppError(404, "user not found")
+  }
 
-if (user.status === "blocked") {
-  throw new AppError(403, "user is blocked")
-}
+  // check if the user is alrady deleted
 
- // create token and send to the client
+  if (user.isDeleted) {
+    throw new AppError(403, "user is deleted")
+  }
 
- const jwtPayload = {
-  userId: user.id,
+  // check if the user is alrady blocked
+
+  if (user.status === "blocked") {
+    throw new AppError(403, "user is blocked")
+  }
+
+  const decoded = jwt.verify(token, config.jwt_access_secret as string) as JwtPayload;
+
+ if(decoded.userId!==payload.id){
+  throw new AppError(403, "you are forbidden!")
+ }
+
+//hased new password 
+const newHashedPassword = await bycrpt.hash(payload.newPassword, Number(config.bcrypt_salt_rounds))
+
+
+
+ await User.findOneAndUpdate({
+  id: decoded.userId,
   role: user.role
-}
-
-
-const resetToken = createToken(jwtPayload, 
-  config.jwt_access_secret as string, 
-  "10m")
-
-
-const resetUILink = `${config.reset_password_ui_link}id=${user.id}&token=${resetToken}`
-
-
-sendEmail(user.email,resetUILink)
-}
-
-
-const resetPassword = async(payload:{id:string, newPassword:string},token:string)=>{
-//if the user exits
-const user = await User.isUserExitsByCustomId(payload.id)
-
-if (!user) {
-  throw new AppError(404, "user not found")
-}
-
-// check if the user is alrady deleted
-
-if (user.isDeleted) {
-  throw new AppError(403, "user is deleted")
-}
-
-// check if the user is alrady blocked
-
-if (user.status === "blocked") {
-  throw new AppError(403, "user is blocked")
-}
+}, {
+  password: newHashedPassword,
+  needsPasswordChange: false,
+  passwordChangeAt: new Date()
+}, {
+  new: true
+})
 
 }
 
@@ -240,10 +262,7 @@ if (user.status === "blocked") {
 
 
 
-
-
-
-// http://localhost:3000/id=A-0001&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBLTAwMDEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDYwMDY5OTYsImV4cCI6MTcwNjAwNzU5Nn0.xCkWmOKvleAKAxj6NvFFepgSzTGGP3obxzhFakUI9eg
+// http://localhost:3000/id=A-0001&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBLTAwMDEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDYwMDg5NTcsImV4cCI6MTcwNjAwOTU1N30.BttNbEXhtLj9-JIqGuOegYzLoaWQeCLOlI5HsuhdGuI
 
 
 
@@ -253,6 +272,6 @@ export const AuthServices = {
   changePassword,
   refreshToken,
   forgetPassword,
-  resetPassword 
+  resetPassword
 };
 
