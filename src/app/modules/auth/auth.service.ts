@@ -5,6 +5,7 @@ import { User } from "../user/user.model";
 import { TLogInUser } from "./auth.interface";
 import bycrpt from "bcrypt"
 import { createToken } from "./auth.utils";
+import { sendEmail } from "../../utils/sendEmail";
 const loginUser = async (payload: TLogInUser) => {
 
 
@@ -200,15 +201,15 @@ if (user.status === "blocked") {
 }
 
 
-const accessToken = createToken(jwtPayload, 
+const resetToken = createToken(jwtPayload, 
   config.jwt_access_secret as string, 
   "10m")
 
 
-const resetUILink = `http://localhost:5173/api/v1/id=${user.id}&token=${accessToken}`
+const resetUILink = `http://localhost:5173/api/v1/id=${user.id}&token=${resetToken}`
 console.log(resetUILink);
 
-
+sendEmail()
 }
 
 

@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
-import { Model, Types } from "mongoose";
+import { Model } from "mongoose";
 import { USER_ROLE } from "./user.const";
 export  type TUserRole = keyof typeof USER_ROLE
 
 export type TUser = {
   id: string;
+  email:string;
   password: string;
   needsPasswordChange: boolean;
   role: 'admin' | 'student' | 'faculty';
