@@ -4,7 +4,7 @@ import AppError from "../../errors/AppError";
 import { User } from "../user/user.model";
 import { TLogInUser } from "./auth.interface";
 import bycrpt from "bcrypt"
-import { createToken } from "./auth.utils";
+import { createToken, verifyToken } from "./auth.utils";
 import { sendEmail } from "../../utils/sendEmail";
 const loginUser = async (payload: TLogInUser) => {
 
@@ -127,7 +127,7 @@ const refreshToken = async (token: string) => {
   // check if the token is valid
 
 
-  const decoded = jwt.verify(token, config.jwt_refresh_secret as string) as JwtPayload;
+  const decoded = verifyToken(token,config.jwt_refresh_secret as string)
 
   const { userId, iat } = decoded
 
