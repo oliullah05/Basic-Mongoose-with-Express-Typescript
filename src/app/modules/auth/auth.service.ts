@@ -172,11 +172,55 @@ const refreshToken = async (token: string) => {
 
 }
 
+const forgetPassword = async(userId:string)=>{
+//if the user exits
+const user = await User.isUserExitsByCustomId(userId)
+
+if (!user) {
+  throw new AppError(404, "user not found")
+}
+
+// check if the user is alrady deleted
+
+if (user.isDeleted) {
+  throw new AppError(403, "user is deleted")
+}
+
+// check if the user is alrady blocked
+
+if (user.status === "blocked") {
+  throw new AppError(403, "user is blocked")
+}
+
+ // create token and send to the client
+
+ const jwtPayload = {
+  userId: user.id,
+  role: user.role
+}
+
+
+const accessToken = createToken(jwtPayload, 
+  config.jwt_access_secret as string, 
+  "10m")
+
+
+const resetUILink = `http://localhost:5173/api/v1/id=${user.id}&token=${accessToken}`
+console.log(resetUILink);
+
+
+}
+
+
+
+
+
 
 
 export const AuthServices = {
   loginUser,
   changePassword,
-  refreshToken
+  refreshToken,
+  forgetPassword
 };
 

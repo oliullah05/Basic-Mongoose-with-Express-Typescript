@@ -14,7 +14,7 @@ export type TUser = {
 };
 export interface UserModel extends Model<TUser> {
   // myStaticMethod(): number
-  isUserExitsByCustomId(id:Types.ObjectId):Promise<TUser>;
+  isUserExitsByCustomId(id:string):Promise<TUser>;
   isPasswordMatched(plainTextPassword:string,hashedPassword:string):Promise<boolean> |null;
   isJWTIssedBeforePasswordChanged(passwordChangedTimeStamp:Date,JwtissuedTimeStamp:number):boolean
 
