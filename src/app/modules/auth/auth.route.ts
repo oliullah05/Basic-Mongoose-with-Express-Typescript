@@ -23,7 +23,9 @@ router.post(
 
 router.post("/refresh-token",validateRequest(AuthValidation.RefreshTokenValidationSchema),AuthControllers.refreshToken)
 
-router.post("/forget-password",validateRequest(AuthValidation.ForgetPAsswordValidationSchema),AuthControllers.forgetPassword)
+router.post("/forget-password",validateRequest(AuthValidation.ForgetPasswordValidationSchema),AuthControllers.forgetPassword)
+
+router.post("/reset-password",validateRequest(AuthValidation.ResetPasswordValidationSchema),AuthControllers.resetPassword)
 
 
 

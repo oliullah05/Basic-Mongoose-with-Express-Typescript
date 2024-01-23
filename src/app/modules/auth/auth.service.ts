@@ -213,7 +213,37 @@ sendEmail(user.email,resetUILink)
 }
 
 
+const resetPassword = async(payload:{id:string, newPassword:string},token:string)=>{
+//if the user exits
+const user = await User.isUserExitsByCustomId(payload.id)
 
+if (!user) {
+  throw new AppError(404, "user not found")
+}
+
+// check if the user is alrady deleted
+
+if (user.isDeleted) {
+  throw new AppError(403, "user is deleted")
+}
+
+// check if the user is alrady blocked
+
+if (user.status === "blocked") {
+  throw new AppError(403, "user is blocked")
+}
+
+}
+
+
+
+
+
+
+
+
+
+// http://localhost:3000/id=A-0001&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBLTAwMDEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDYwMDY5OTYsImV4cCI6MTcwNjAwNzU5Nn0.xCkWmOKvleAKAxj6NvFFepgSzTGGP3obxzhFakUI9eg
 
 
 
@@ -222,6 +252,7 @@ export const AuthServices = {
   loginUser,
   changePassword,
   refreshToken,
-  forgetPassword
+  forgetPassword,
+  resetPassword 
 };
 
