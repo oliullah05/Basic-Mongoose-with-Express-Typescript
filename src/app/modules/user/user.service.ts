@@ -189,23 +189,28 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
 };
 
 
-const getMe = async(token:string)=>{
+const getMe = async(userId:string,role:string)=>{
 
-const  decoded = verifyToken(token,config.jwt_access_secret as string)
+// const  decoded = verifyToken(token,config.jwt_access_secret as string)
 
-const {userId,role}=decoded
-
+// const {userId,role}=decoded
+console.log(userId,role);
 let result = null
 
 if(role==="student"){
-result= await Student.findOne({id:userId})
+result= await Student.findOne({id:userId}).populate("user").populate("academicDepartment").populate('admissionSemester')
 }
-else if(role==="admin"){
-result= await Admin.findOne({id:userId})
+
+if(role==="admin"){
+result= await Admin.findOne({id:userId}).populate("user").populate("academicDepartment").populate('admissionSemester')
 }
-else if(role==="faculty"){
-result= await Faculty.findOne({id:userId})
+
+
+
+if(role==="faculty"){
+result= await Faculty.findOne({id:userId}).populate("user").populate("academicDepartment").populate('admissionSemester')
 }
+
 
 
 
